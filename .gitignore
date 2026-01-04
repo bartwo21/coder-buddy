@@ -1,0 +1,11 @@
+out
+dist
+node_modules
+.vscode-test/
+*.vsix
+webview-ui/build
+webview-ui/dist
+webview-ui/src/**/*.js
+webview-ui/src/**/*.map
+webview-ui/vite.config.js
+webview-ui/vite.config.js.map
