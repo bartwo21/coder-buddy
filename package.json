@@ -23,7 +23,12 @@
         }
       ]
     },
-    "commands": []
+    "commands": [
+      {
+        "command": "coderBuddy.setApiKey",
+        "title": "Coder Buddy: Set API Key"
+      }
+    ]
   },
   "scripts": {
     "vscode:prepublish": "npm run build:webview && npm run compile",
@@ -36,14 +41,17 @@
     "test": "vscode-test"
   },
   "devDependencies": {
-    "@types/vscode": "^1.107.0",
     "@types/mocha": "^10.0.10",
     "@types/node": "22.x",
+    "@types/vscode": "^1.107.0",
+    "@vscode/test-cli": "^0.0.12",
+    "@vscode/test-electron": "^2.5.2",
     "concurrently": "^9.1.2",
-    "typescript-eslint": "^8.48.1",
     "eslint": "^9.39.1",
     "typescript": "^5.9.3",
-    "@vscode/test-cli": "^0.0.12",
-    "@vscode/test-electron": "^2.5.2"
+    "typescript-eslint": "^8.48.1"
+  },
+  "dependencies": {
+    "openai": "^6.15.0"
   }
 }

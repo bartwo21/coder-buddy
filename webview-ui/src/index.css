@@ -3,10 +3,62 @@
 :root,
 body,
 #root {
-    height: 100%;
+	height: 100%;
 }
 
 body {
-    margin: 0;
-    background: transparent;
+	margin: 0;
+}
+
+@keyframes shake {
+	0%,
+	100% {
+		transform: translateX(0);
+	}
+	25% {
+		transform: translateX(-4px) rotate(-5deg);
+	}
+	75% {
+		transform: translateX(4px) rotate(5deg);
+	}
+}
+
+@keyframes bounce {
+	0%,
+	100% {
+		transform: translateY(0);
+		animation-timing-function: cubic-bezier(0.8, 0, 1, 1);
+	}
+	50% {
+		transform: translateY(-10px);
+		animation-timing-function: cubic-bezier(0, 0, 0.2, 1);
+	}
+}
+
+@keyframes pulse-ring {
+	0% {
+		transform: scale(0.95);
+		box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.7);
+	}
+	70% {
+		transform: scale(1);
+		box-shadow: 0 0 0 10px rgba(59, 130, 246, 0);
+	}
+	100% {
+		transform: scale(0.95);
+		box-shadow: 0 0 0 0 rgba(59, 130, 246, 0);
+	}
+}
+
+.animate-shake {
+	animation: shake 0.4s cubic-bezier(0.36, 0.07, 0.19, 0.97) 8; /* 8 times = ~3.2s */
+}
+
+.animate-bounce-custom {
+	animation: bounce 0.6s 5; /* 5 times = 3.0s */
+	animation-fill-mode: forwards; /* Stay grounded at end */
+}
+
+.animate-pulse-ring {
+	animation: pulse-ring 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
 }

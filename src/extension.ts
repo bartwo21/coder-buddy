@@ -1,34 +1,138 @@
 import * as vscode from "vscode";
+import { AIService } from "./services/AIService";
+import { GatekeeperService } from "./services/GatekeeperService";
+import { SecretStorageService } from "./services/SecretStorageService";
 
 const VIEW_ID = "aiCompanion.sidebar";
 const WEBVIEW_DIST_DIR = "webview-ui/build";
+const DEBOUNCE_DELAY = 3000; // 3 seconds
 
-export function activate(context: vscode.ExtensionContext) {
+let debounceTimer: NodeJS.Timeout | undefined;
+
+export async function activate(context: vscode.ExtensionContext) {
+	// 1. Init Services
+	SecretStorageService.init(context);
+	const secretStorage = SecretStorageService.instance;
+	const gatekeeper = GatekeeperService.instance;
+	const aiService = AIService.instance;
+
 	const provider = new AICompanionViewProvider(context.extensionUri);
 
+	// 2. Register Webview
 	context.subscriptions.push(
 		vscode.window.registerWebviewViewProvider(VIEW_ID, provider, {
 			webviewOptions: { retainContextWhenHidden: true },
-		})
+		}),
+	);
+
+	// 3. Register Commands
+	context.subscriptions.push(
+		vscode.commands.registerCommand("coderBuddy.setApiKey", async () => {
+			const apiKey = await vscode.window.showInputBox({
+				title: "Enter your OpenAI API Key",
+				prompt: "Starts with sk-...",
+				ignoreFocusOut: true,
+				password: true,
+				validateInput: (value) => {
+					if (!value.startsWith("sk-")) {
+						return "API Key must start with 'sk-'";
+					}
+					return null;
+				},
+			});
+
+			if (apiKey) {
+				await secretStorage.storeKey(apiKey);
+				vscode.window.showInformationMessage("API Key saved securely! 🤖");
+			}
+		}),
+	);
+
+	// 4. Check for Key on Startup
+	const key = await secretStorage.getKey();
+	if (!key) {
+		const result = await vscode.window.showInformationMessage(
+			"Coder Buddy needs an OpenAI API Key to work.",
+			"Enter Key",
+			"How to Get?",
+		);
+
+		if (result === "Enter Key") {
+			vscode.commands.executeCommand("coderBuddy.setApiKey");
+		} else if (result === "How to Get?") {
+			vscode.env.openExternal(
+				vscode.Uri.parse("https://platform.openai.com/api-keys"),
+			);
+		}
+	}
+
+	// 5. Watch for Code Changes (The Brain)
+	context.subscriptions.push(
+		vscode.workspace.onDidChangeTextDocument((event) => {
+			const editor = vscode.window.activeTextEditor;
+			if (!editor || editor.document !== event.document) {
+				return;
+			}
+
+			// Clear existing timer
+			if (debounceTimer) {
+				clearTimeout(debounceTimer);
+			}
+
+			// Set new timer (Debounce)
+			debounceTimer = setTimeout(async () => {
+				console.log("[Extension] User stopped typing. Checking Gatekeeper...");
+
+				// 1. Gatekeeper Check
+				if (gatekeeper.shouldTrigger(event.document)) {
+					// 2. AI Analysis
+					const result = await aiService.analyzeCode(event.document.getText());
+
+					// 3. UI Update
+					if (result) {
+						provider.sendMessage({
+							command: "updateMood",
+							mood: result.mood,
+							text: result.text,
+						});
+					}
+				}
+			}, DEBOUNCE_DELAY);
+		}),
 	);
 }
 
 class AICompanionViewProvider implements vscode.WebviewViewProvider {
+	private _view?: vscode.WebviewView;
+
 	constructor(private readonly extensionUri: vscode.Uri) { }
 
-	async resolveWebviewView(webviewView: vscode.WebviewView): Promise<void> {
+	public resolveWebviewView(webviewView: vscode.WebviewView): void {
+		this._view = webviewView;
 		const webview = webviewView.webview;
 
 		webview.options = {
 			enableScripts: true,
-			localResourceRoots: [vscode.Uri.joinPath(this.extensionUri, WEBVIEW_DIST_DIR)],
+			localResourceRoots: [
+				vscode.Uri.joinPath(this.extensionUri, WEBVIEW_DIST_DIR),
+			],
 		};
 
+		this.setWebviewHtml(webview);
+	}
+
+	public sendMessage(message: any) {
+		if (this._view) {
+			this._view.webview.postMessage(message);
+		}
+	}
+
+	private async setWebviewHtml(webview: vscode.Webview) {
 		try {
 			const indexPath = vscode.Uri.joinPath(
 				this.extensionUri,
 				WEBVIEW_DIST_DIR,
-				"index.html"
+				"index.html",
 			);
 			const bytes = await vscode.workspace.fs.readFile(indexPath);
 			const html = new TextDecoder("utf-8").decode(bytes);
@@ -39,8 +143,6 @@ class AICompanionViewProvider implements vscode.WebviewViewProvider {
 	}
 
 	private withWebviewCsp(html: string, webview: vscode.Webview): string {
-		// Vite singlefile build inline script/style üretir.
-		// DiceBear için https görsellerine izin veriyoruz.
 		const csp = [
 			"default-src 'none';",
 			`img-src ${webview.cspSource} https: data:;`,
@@ -54,7 +156,7 @@ class AICompanionViewProvider implements vscode.WebviewViewProvider {
 		if (html.includes('http-equiv="Content-Security-Policy"')) {
 			return html.replace(
 				/<meta\s+http-equiv="Content-Security-Policy"[^>]*>/i,
-				meta
+				meta,
 			);
 		}
 		return html.replace(/<\/head>/i, `${meta}\n</head>`);
