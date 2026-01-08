@@ -8,11 +8,9 @@ export default function App() {
 
 	// Determines which animation is currently active.
 	const [activeAnimation, setActiveAnimation] = useState<string>("");
-
 	const prevTextRef = useRef(text);
 
 	useEffect(() => {
-		const isNewMessage = text !== prevTextRef.current;
 		prevTextRef.current = text;
 
 		let nextAnim = "";

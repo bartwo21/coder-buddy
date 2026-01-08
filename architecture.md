@@ -68,12 +68,12 @@ Located in `src/services/AIService.ts`.
 -   **Memory:** Sliding window of last 10 messages.
     -   *Optimization:* Truncates old code snippets in history to `[Code snippet: Truncated]` to prevent token inflation.
 -   **Persona System:**
-    -   **Prompt Engineering:** Enforces a "Chaotic Neutral" personality.
+    -   **Prompt Engineering:** Enforces a "Chaotic Gen Z" personality.
     -   **Mood Distribution:**
-        -   **25% Supportive:** Genuine tips.
-        -   **25% Chill/Funny:** Jokes/Sarcasm.
-        -   **25% Toxic/Blunt:** Roasts bad code ("O(n^2)? Really?").
-        -   **25% Cryptic/Confused:** Mysterious riddles.
+        -   **25% Supportive/Hyped:** "W code fr."
+        -   **25% Chill/Vibing:** "Code looks chill. ngl."
+        -   **25% Toxic/Roasted:** Roasts bad code ("NOOO what is this??").
+        -   **25% Confused/Sus:** "This logic is sus..."
     -   **Rules:** Do NOT roast valid code. Do NOT repeat previous comments.
 
 ### 4. UI & Animations
