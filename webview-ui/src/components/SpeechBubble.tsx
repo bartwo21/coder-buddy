@@ -13,7 +13,7 @@ export function SpeechBubble({ text, subtitle, mood }: Props) {
 		"absolute -bottom-2 left-6 h-4 w-4 rotate-45 border-b border-r transition-colors duration-300";
 
 	// Mood colors
-	if (mood === "angry" || mood === "toxic") {
+	if (mood === "angry") {
 		containerClasses += " border-red-900/50 bg-red-950/90 text-red-100";
 		arrowClasses += " border-red-900/50 bg-red-950/90";
 	} else if (mood === "happy") {

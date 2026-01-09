@@ -16,21 +16,21 @@ body {
 		transform: translateX(0);
 	}
 	25% {
-		transform: translateX(-4px) rotate(-5deg);
+		transform: translateX(-1px) rotate(-1deg);
 	}
 	75% {
-		transform: translateX(4px) rotate(5deg);
+		transform: translateX(1px) rotate(1deg);
 	}
 }
 
-@keyframes bounce {
+@keyframes bounce-low {
 	0%,
 	100% {
 		transform: translateY(0);
 		animation-timing-function: cubic-bezier(0.8, 0, 1, 1);
 	}
 	50% {
-		transform: translateY(-10px);
+		transform: translateY(-5px);
 		animation-timing-function: cubic-bezier(0, 0, 0.2, 1);
 	}
 }
@@ -51,11 +51,11 @@ body {
 }
 
 .animate-shake {
-	animation: shake 0.4s cubic-bezier(0.36, 0.07, 0.19, 0.97) 8; /* 8 times = ~3.2s */
+	animation: shake 0.4s cubic-bezier(0.36, 0.07, 0.19, 0.97) 4; /* 4 times = 1.6s */
 }
 
 .animate-bounce-custom {
-	animation: bounce 0.6s 5; /* 5 times = 3.0s */
+	animation: bounce-low 0.5s 3; /* 3 times = 1.5s */
 	animation-fill-mode: forwards; /* Stay grounded at end */
 }
 

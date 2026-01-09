@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { AvatarButton } from "./components/AvatarButton";
+import { Avatar } from "./components/Avatar";
 import { SpeechBubble } from "./components/SpeechBubble";
 import { useCompanion } from "./hooks/useCompanion";
 
@@ -16,7 +16,6 @@ export default function App() {
 		let nextAnim = "";
 		switch (mood) {
 			case "angry":
-			case "toxic":
 				nextAnim = "animate-shake";
 				break;
 			case "happy":
@@ -56,7 +55,7 @@ export default function App() {
 
 	return (
 		<div className="relative h-full w-full">
-			<div className="absolute bottom-3 left-3 flex flex-col items-start gap-2">
+			<div className="absolute bottom-3 left-3 flex flex-col items-start gap-2 mr-4">
 				{/* Mood Animation Wrapper (Container Level) */}
 				<div
 					key={animationKey}
@@ -67,8 +66,8 @@ export default function App() {
 						// The 'key' update on next message will handle the restart.
 					}}
 				>
-					<SpeechBubble text={text} mood={mood} subtitle="Coder Buddy AI" />
-					<AvatarButton
+					<SpeechBubble text={text} mood={mood} subtitle="Coder Buddy" />
+					<Avatar
 						src={avatarUrl}
 						alt="Coder Buddy"
 						onClick={() => {}}

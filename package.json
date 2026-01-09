@@ -1,8 +1,24 @@
 {
   "name": "coder-buddy",
-  "displayName": "coder_buddy",
-  "description": "",
+  "displayName": "Coder Buddy",
+  "publisher": "bartwo21",
+  "license": "MIT",
+  "keywords": [
+    "ai",
+    "chat",
+    "assistant",
+    "code review",
+    "fun",
+    "roast",
+    "gen z"
+  ],
+  "description": "Your chaotic Gen Z pair programmer. A moody AI companion that roasts your code or hypes you up.",
   "version": "0.0.1",
+  "icon": "icon.png",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/bartwo21/coder-buddy"
+  },
   "engines": {
     "vscode": "^1.90.0"
   },
@@ -27,6 +43,10 @@
       {
         "command": "coderBuddy.setApiKey",
         "title": "Coder Buddy: Set API Key"
+      },
+      {
+        "command": "coderBuddy.removeApiKey",
+        "title": "Coder Buddy: Remove API Key"
       }
     ]
   },

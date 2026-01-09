@@ -8,20 +8,13 @@ type Props = {
 	className?: string;
 };
 
-export function AvatarButton({
-	src,
-	alt,
-	onClick,
-	mood,
-	className = "",
-}: Props) {
+export function Avatar({ src, alt, onClick, mood, className = "" }: Props) {
 	// Base classes
 	let classes = `h-12 w-12 cursor-pointer select-none rounded-full border-2 transition-all duration-300 ${className}`;
 
 	// Mood specific styling
 	switch (mood) {
 		case "angry":
-		case "toxic":
 			classes += " border-red-500 shadow-[0_0_15px_rgba(239,68,68,0.5)]";
 			break;
 		case "happy":

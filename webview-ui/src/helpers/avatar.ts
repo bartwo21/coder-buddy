@@ -1,4 +1,4 @@
-export type Mood = "idle" | "thinking" | "angry" | "happy" | "toxic";
+export type Mood = "idle" | "thinking" | "angry" | "happy";
 
 type DiceBearPreset = {
 	eyebrows: string;
@@ -10,7 +10,7 @@ type DiceBearPreset = {
 
 export const SEED = "Felix";
 
-export const MOODS: Mood[] = ["idle", "thinking", "angry", "happy", "toxic"];
+export const MOODS: Mood[] = ["idle", "thinking", "angry", "happy"];
 
 // Mock: 5 farklı ruh hali preset'i (Felix seed sabit; mimikleri varyantlarla oynuyoruz)
 export const MOOD_PRESETS: Record<Mood, DiceBearPreset> = {
@@ -18,7 +18,8 @@ export const MOOD_PRESETS: Record<Mood, DiceBearPreset> = {
 		eyebrows: "variant10",
 		eyes: "variant01",
 		mouth: "variant01",
-		glassesProbability: 0,
+		glasses: "variant01",
+		glassesProbability: 100,
 	},
 	thinking: {
 		eyebrows: "variant04",
@@ -38,19 +39,11 @@ export const MOOD_PRESETS: Record<Mood, DiceBearPreset> = {
 		mouth: "variant26",
 		glassesProbability: 0,
 	},
-	toxic: {
-		eyebrows: "variant12",
-		eyes: "variant24",
-		mouth: "variant23",
-		glasses: "variant01",
-		glassesProbability: 100,
-	},
 };
 
 export const MOOD_TEXT: Record<Mood, string> = {
-	idle: "I'm here. Analyzing the code flow.",
-	thinking: "Hmm… This smelled. Thinking.",
-	angry: "This is… We won't leave it like this.",
-	happy: "Great! Like this.",
-	toxic: "Who wrote this code? You?",
+	idle: "just vibing. waiting for you to cook something",
+	thinking: "hold up... let me process this tea ☕️",
+	angry: "bro... ain't no way you wrote this 💀",
+	happy: "sheesh! absolute cinema. w code. 🔥",
 };

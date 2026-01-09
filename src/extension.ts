@@ -5,7 +5,7 @@ import { SecretStorageService } from "./services/SecretStorageService";
 
 const VIEW_ID = "aiCompanion.sidebar";
 const WEBVIEW_DIST_DIR = "webview-ui/build";
-const DEBOUNCE_DELAY = 3000; // 3 seconds
+const DEBOUNCE_DELAY = 1000; // 1 second
 
 let debounceTimer: NodeJS.Timeout | undefined;
 
@@ -44,27 +44,49 @@ export async function activate(context: vscode.ExtensionContext) {
 			if (apiKey) {
 				await secretStorage.storeKey(apiKey);
 				vscode.window.showInformationMessage("API Key saved securely! 🤖");
+
+				provider.sendMessage({
+					command: "updateMood",
+					mood: "idle",
+					text: "just vibing. waiting for you to cook something"
+				});
+			}
+		}),
+		vscode.commands.registerCommand("coderBuddy.removeApiKey", async () => {
+			const choice = await vscode.window.showWarningMessage(
+				"Are you sure you want to remove your OpenAI API Key? Coder Buddy will stop working.",
+				"Yes, Remove It",
+				"Cancel"
+			);
+
+			if (choice === "Yes, Remove It") {
+				await secretStorage.deleteKey();
+				vscode.window.showInformationMessage("API Key removed. Coder Buddy is now dormant. 😴");
 			}
 		}),
 	);
 
 	// 4. Check for Key on Startup
-	const key = await secretStorage.getKey();
-	if (!key) {
-		const result = await vscode.window.showInformationMessage(
-			"Coder Buddy needs an OpenAI API Key to work.",
-			"Enter Key",
-			"How to Get?",
-		);
-
-		if (result === "Enter Key") {
-			vscode.commands.executeCommand("coderBuddy.setApiKey");
-		} else if (result === "How to Get?") {
-			vscode.env.openExternal(
-				vscode.Uri.parse("https://platform.openai.com/api-keys"),
-			);
+	// 4. Check for Key on Startup (Non-blocking)
+	secretStorage.getKey().then((key) => {
+		if (!key) {
+			vscode.window
+				.showInformationMessage(
+					"Coder Buddy needs an OpenAI API Key to work.",
+					"Enter Key",
+					"How to Get?",
+				)
+				.then((result) => {
+					if (result === "Enter Key") {
+						vscode.commands.executeCommand("coderBuddy.setApiKey");
+					} else if (result === "How to Get?") {
+						vscode.env.openExternal(
+							vscode.Uri.parse("https://platform.openai.com/api-keys"),
+						);
+					}
+				});
 		}
-	}
+	});
 
 	// 5. Watch for Code Changes (The Brain)
 	context.subscriptions.push(
@@ -81,7 +103,6 @@ export async function activate(context: vscode.ExtensionContext) {
 
 			// Set new timer (Debounce)
 			debounceTimer = setTimeout(async () => {
-				console.log("[Extension] User stopped typing. Checking Gatekeeper...");
 
 				// 1. Gatekeeper Check
 				if (gatekeeper.shouldTrigger(event.document)) {
@@ -137,6 +158,17 @@ class AICompanionViewProvider implements vscode.WebviewViewProvider {
 			const bytes = await vscode.workspace.fs.readFile(indexPath);
 			const html = new TextDecoder("utf-8").decode(bytes);
 			webview.html = this.withWebviewCsp(html, webview);
+
+			setTimeout(async () => {
+				const key = await SecretStorageService.instance.getKey();
+				if (!key) {
+					this.sendMessage({
+						command: "updateMood",
+						mood: "angry",
+						text: "where is the api key? 💀 press CTRL+SHIFT+P and run 'Coder Buddy: Set API Key'"
+					});
+				}
+			}, 4000);
 		} catch {
 			webview.html = this.withWebviewCsp(this.getMissingBuildHtml(), webview);
 		}
