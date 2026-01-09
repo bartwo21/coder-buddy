@@ -4,8 +4,7 @@
 
 Coder Buddy lives in your sidebar, watching your code in real-time. It's not just a copilot; it's a **moody companion**. Sometimes it hypes you up ("sheesh! absolute cinema"), and sometimes it absolutely roasts your O(n^2) loops.
 
-![Coder Buddy Demo](path/to/demo.gif)
-*(Add a demo GIF here showing the moods changing)*
+![Coder Buddy Demo](demo.gif)
 
 ## ✨ Features
 
