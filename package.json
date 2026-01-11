@@ -20,7 +20,7 @@
     "url": "https://github.com/bartwo21/coder-buddy"
   },
   "engines": {
-    "vscode": "^1.90.0"
+    "vscode": "^1.104.0"
   },
   "categories": [
     "Other"
@@ -63,7 +63,7 @@
   "devDependencies": {
     "@types/mocha": "^10.0.10",
     "@types/node": "22.x",
-    "@types/vscode": "^1.107.0",
+    "@types/vscode": "^1.104.0",
     "@vscode/test-cli": "^0.0.12",
     "@vscode/test-electron": "^2.5.2",
     "concurrently": "^9.1.2",
@@ -72,6 +72,7 @@
     "typescript-eslint": "^8.48.1"
   },
   "dependencies": {
+    "@vscode/vsce": "^3.7.1",
     "openai": "^6.15.0"
   }
 }
