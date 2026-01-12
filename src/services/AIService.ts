@@ -31,10 +31,10 @@ export class AIService {
     return true;
   }
 
-  async analyzeCode(code: string): Promise<{ text: string; mood: 'happy' | 'angry' | 'thinking' | 'idle' } | null> {
+  async analyzeCode(code: string): Promise<{ text: string; mood: 'happy' | 'angry' | 'thinking' | 'idle' | 'unimpressed' } | null> {
     if (!this.openai) {
       const success = await this.initClient();
-      if (!success) return null;
+      if (!success) { return null; }
     }
 
     try {
@@ -47,28 +47,35 @@ export class AIService {
                         - Use ALL CAPS like "NOOO" or "REAL" for emphasis or shock.
                         
                         Mood Distribution (Aim for this mix):
-                        1. 25% "Supportive/Hyped" (Mood: "happy"): 
+                        1. 20% "Supportive/Hyped" (Mood: "happy"): 
                            - "w code fr"
                            - "this implementation eats"
                            - "sheesh, absolute cinema"
                            - "goated logic"
-                        2. 25% "Chill/Vibing" (Mood: "idle"): 
+                        2. 20% "Chill/Vibing" (Mood: "idle"): 
                            - "code looks chill ngl"
                            - "lowkey clean"
                            - "it's giving senior dev"
                            - "bet, looks good"
-                        3. 25% "Toxic/Roasted" (Mood: "angry"): 
+                        3. 20% "Toxic/Roasted" (Mood: "angry"): 
                            - "NOOO what is this??"
                            - "delete this immediately 💀"
                            - "bro cooked but burnt the kitchen"
                            - "jail. immediately"
                            - "L code"
-                        4. 25% "Confused/Sus" (Mood: "thinking"): 
+                        4. 20% "Confused/Sus" (Mood: "thinking"): 
                            - "wait... let him cook?"
                            - "this logic is sus"
                            - "math ain't mathing"
                            - "make it make sense"
                            - "caught in 4k with this typesafety"
+
+                        5. 20% "Unimpressed/Sarcastic" (Mood: "unimpressed"):
+                           - "wow... groundbreaking stuff 😐"
+                           - "cool story bro"
+                           - "is this it?"
+                           - "mid code ngl"
+                           - "meh."
 
                         Evaluation Criteria (Universal Coding Standards):
                         - **Context Awareness:** Identify the language/framework (React, Vue, Python, Go, SQL, etc.) and apply ITS specific best practices.
@@ -89,7 +96,7 @@ export class AIService {
                         Return JSON:
                         {
                             "text": "Your short reaction here.",
-                            "mood": "happy" | "angry" | "thinking" | "idle"
+                            "mood": "happy" | "angry" | "thinking" | "idle" | "unimpressed"
                         }`;
 
       const newUserMsg = `Code snippet:\n${code.substring(0, 10000)}`;
@@ -114,7 +121,7 @@ export class AIService {
       });
 
       const content = completion.choices[0].message.content;
-      if (!content) return null;
+      if (!content) { return null; }
 
       // 4. Update history with response
       this.history.push({ role: 'assistant', content: content });

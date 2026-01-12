@@ -19,6 +19,9 @@ export function SpeechBubble({ text, subtitle, mood }: Props) {
 	} else if (mood === "happy") {
 		containerClasses += " border-green-900/50 bg-green-950/90 text-green-100";
 		arrowClasses += " border-green-900/50 bg-green-950/90";
+	} else if (mood === "unimpressed") {
+		containerClasses += " border-indigo-900/50 bg-indigo-950/90 text-indigo-100";
+		arrowClasses += " border-indigo-900/50 bg-indigo-950/90";
 	} else {
 		// Default / Thinking
 		containerClasses += " border-zinc-700 bg-zinc-900/85 text-zinc-100";

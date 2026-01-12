@@ -1,4 +1,4 @@
-export type Mood = "idle" | "thinking" | "angry" | "happy";
+export type Mood = "idle" | "thinking" | "angry" | "happy" | "unimpressed";
 
 type DiceBearPreset = {
 	eyebrows: string;
@@ -10,9 +10,8 @@ type DiceBearPreset = {
 
 export const SEED = "Felix";
 
-export const MOODS: Mood[] = ["idle", "thinking", "angry", "happy"];
+export const MOODS: Mood[] = ["idle", "thinking", "angry", "happy", "unimpressed"];
 
-// Mock: 5 farklı ruh hali preset'i (Felix seed sabit; mimikleri varyantlarla oynuyoruz)
 export const MOOD_PRESETS: Record<Mood, DiceBearPreset> = {
 	idle: {
 		eyebrows: "variant10",
@@ -39,6 +38,12 @@ export const MOOD_PRESETS: Record<Mood, DiceBearPreset> = {
 		mouth: "variant26",
 		glassesProbability: 0,
 	},
+	unimpressed: {
+		eyebrows: "variant11",
+		eyes: "variant17",
+		mouth: "variant10",
+		glassesProbability: 0,
+	},
 };
 
 export const MOOD_TEXT: Record<Mood, string> = {
@@ -46,4 +51,5 @@ export const MOOD_TEXT: Record<Mood, string> = {
 	thinking: "hold up... let me process this tea ☕️",
 	angry: "bro... ain't no way you wrote this 💀",
 	happy: "sheesh! absolute cinema. w code. 🔥",
+	unimpressed: "wow... groundbreaking stuff 😐",
 };
