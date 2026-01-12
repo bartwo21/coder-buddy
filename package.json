@@ -13,7 +13,7 @@
     "gen z"
   ],
   "description": "Your chaotic Gen Z pair programmer. A moody AI companion that roasts your code or hypes you up.",
-  "version": "0.0.1",
+  "version": "0.0.3",
   "icon": "icon.ico",
   "repository": {
     "type": "git",
