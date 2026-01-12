@@ -34,6 +34,16 @@ Coder Buddy lives in your sidebar, watching your code in real-time. It's not jus
 
 - An **OpenAI API Key** with access to `gpt-4o-mini` (recommended for speed/cost) or similar models.
 
+## 🤖 Model & Cost
+
+Coder Buddy is hardwired to use **`gpt-4o-mini`**.
+
+- **Why?** It's heavily optimized for speed and is incredibly cheap while being smart enough for pair programming context.
+- **Cost Estimate:**
+    - **Input:** ~$0.15 per 1 million tokens.
+    - **Output:** ~$0.60 per 1 million tokens.
+    - **Real talk:** You could code for 8 hours straight with Coder Buddy analyzing every file, and it would likely cost you **pennies**. It's significantly cheaper than a coffee. ☕
+
 ---
 
 **Enjoy coding with a friend who has no filter.** 💀
